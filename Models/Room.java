@@ -1,5 +1,8 @@
 package Models;
 
+import javax.xml.bind.annotation.XmlRootElement;
+
+@XmlRootElement
 public class Room
 {
     private int number;
