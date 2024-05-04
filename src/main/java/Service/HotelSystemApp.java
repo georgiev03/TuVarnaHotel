@@ -1,14 +1,16 @@
-import Models.HotelSystem;
+package src.main.java.Service;
 
-import java.io.IOException;
+import src.main.java.Models.HotelSystem;
+
 import java.util.Scanner;
 
 public class HotelSystemApp
 {
-    public static void main(String[] args) throws IOException
+
+    public static void Start()
     {
         HotelSystem hotelSystem = new HotelSystem();
-        FileHandler fileHandler = new FileHandler();
+        XmlFileHandler fileHandler = new XmlFileHandler();
         Scanner scanner = new Scanner(System.in);
         boolean fileOpened = false;
 
@@ -19,18 +21,18 @@ public class HotelSystemApp
             switch (command.split(" ")[0]) {
                 case "open":
                     if (!fileOpened) {
-                        fileHandler.openFile(command.split(" ")[1]);
+                        hotelSystem = fileHandler.openFile(hotelSystem, command.split(" ")[1]);
                         fileOpened = true;
                     } else {
                         System.out.println("A file is already open.");
                     }
                     break;
                 case "close":
-                    fileHandler.closeFile();
+                    //fileHandler.closeFile();
                     fileOpened = false;
                     break;
                 case "save":
-                    fileHandler.saveFile();
+                   // fileHandler.saveFile();
                     break;
                 case "saveas":
                     //fileHandler.saveFileAs(command.split(" ")[1]);
