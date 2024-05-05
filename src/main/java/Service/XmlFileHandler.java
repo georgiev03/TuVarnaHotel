@@ -40,35 +40,4 @@ public class XmlFileHandler
         }
         return hotelSystem;
     }
-
-
-    //TODO: fix it for ur file
-    public static void saveHotelSystem(HotelSystem hotelSystem, String filePath)
-    {
-        try
-        {
-            JAXBContext context = JAXBContext.newInstance(HotelSystem.class);
-            Marshaller marshaller = context.createMarshaller();
-            marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
-            marshaller.marshal(hotelSystem, new File(filePath));
-        } catch (JAXBException e)
-        {
-            e.printStackTrace();
-        }
-    }
-
-    public static HotelSystem readRoomFromXml(String filePath)
-    {
-        try
-        {
-            JAXBContext context = JAXBContext.newInstance(HotelSystem.class);
-            Unmarshaller unmarshaller = context.createUnmarshaller();
-            return (HotelSystem) unmarshaller.unmarshal(new File(filePath));
-
-        } catch (JAXBException e)
-        {
-            e.printStackTrace();
-            return null;
-        }
-    }
 }

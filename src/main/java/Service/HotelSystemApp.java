@@ -28,8 +28,8 @@ public class HotelSystemApp
                     }
                     break;
                 case "close":
-                    //fileHandler.closeFile();
                     fileOpened = false;
+                    System.out.println("File closed successfully.");
                     break;
                 case "save":
                    // fileHandler.saveFile();
