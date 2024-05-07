@@ -40,4 +40,18 @@ public class XmlFileHandler
         }
         return hotelSystem;
     }
+
+    public void saveFile(HotelSystem hotelSystem)
+    {
+        try
+        {
+            Marshaller marshaller = context.createMarshaller();
+            marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
+            marshaller.marshal(hotelSystem, file);
+            System.out.println("File saved successfully.");
+        } catch (JAXBException e)
+        {
+            System.out.println("An error occurred while saving the file: " + e.getMessage());
+        }
+    }
 }
