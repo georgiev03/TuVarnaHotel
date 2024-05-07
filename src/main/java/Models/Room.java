@@ -5,6 +5,10 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
+
 @Getter
 @Setter
 @NoArgsConstructor
@@ -14,4 +18,23 @@ public class Room
     private int number;
     private int beds;
     private boolean occupied;
+    private List<Stay> stays = new ArrayList<>();
+
+    public boolean isOccupied(LocalDate fromDate, LocalDate toDate) {
+        for (Stay stay : stays) {
+            LocalDate stayFromDate = stay.getFromDate();
+            LocalDate stayToDate = stay.getToDate();
+
+            if ((stayFromDate.isAfter(fromDate) && stayFromDate.isBefore(toDate)) ||
+                    (stayToDate.isAfter(fromDate) && stayToDate.isBefore(toDate))) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public void addStay(Stay stay)
+    {
+        stays.add(stay);
+    }
 }

@@ -32,13 +32,25 @@ public class HotelSystemApp
                     System.out.println("File closed successfully.");
                     break;
                 case "save":
-                   // fileHandler.saveFile();
+                   fileHandler.saveFile(hotelSystem);
                     break;
                 case "saveas":
                     //fileHandler.saveFileAs(command.split(" ")[1]);
                     break;
                 case "checkin":
-                    // Логика за регистриране в стая
+                    if (command.split(" ").length < 5) {
+                        System.out.println("Invalid command format. Please try again.");
+                        break;
+                    }
+
+                    String roomNumber = command.split(" ")[1];
+                    String fromDate = command.split(" ")[2];
+                    String toDate = command.split(" ")[3];
+                    String note = command.split(" ")[4];
+                    int guestsCount = command.split(" ").length > 5 ? Integer.parseInt(command.split(" ")[5]) : -1;
+
+                    String checkInResult = hotelSystem.checkIn(roomNumber, fromDate, toDate, note, guestsCount);
+                    System.out.println(checkInResult);
                     break;
                 case "availability":
                     // Логика за извеждане на свободни стаи
