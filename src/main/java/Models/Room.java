@@ -17,8 +17,13 @@ public class Room
 {
     private int number;
     private int beds;
-    private boolean occupied;
     private List<Stay> stays = new ArrayList<>();
+
+    public Room(int number, int beds)
+    {
+        this.number = number;
+        this.beds = beds;
+    }
 
     public boolean isOccupied(LocalDate fromDate, LocalDate toDate) {
         for (Stay stay : stays) {
@@ -26,7 +31,8 @@ public class Room
             LocalDate stayToDate = stay.getToDate();
 
             if ((stayFromDate.isAfter(fromDate) && stayFromDate.isBefore(toDate)) ||
-                    (stayToDate.isAfter(fromDate) && stayToDate.isBefore(toDate))) {
+                    (stayToDate.isAfter(fromDate) && stayToDate.isBefore(toDate)) ||
+            stayFromDate.isEqual(fromDate) || stayToDate.isEqual(toDate)) {
                 return true;
             }
         }

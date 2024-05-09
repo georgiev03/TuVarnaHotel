@@ -2,6 +2,8 @@ package src.main.java.Service;
 
 import src.main.java.Models.HotelSystem;
 
+import java.time.LocalDate;
+import java.util.List;
 import java.util.Scanner;
 
 public class HotelSystemApp
@@ -53,10 +55,24 @@ public class HotelSystemApp
                     System.out.println(checkInResult);
                     break;
                 case "availability":
-                    // Логика за извеждане на свободни стаи
+                    String dateStr = command.split(" ").length > 1 ? command.split(" ")[1] : String.valueOf(LocalDate.now());
+
+                    List<Integer> availableRooms = hotelSystem.checkAvailability(dateStr);
+
+                    if (availableRooms.isEmpty()) {
+                        System.out.println("No available rooms on " + dateStr);
+                    } else {
+                        System.out.println("Available rooms on " + dateStr + ": " + String.join(", ", availableRooms.toString()));
+                    }
                     break;
                 case "checkout":
-                    // Логика за освобождаване на стая
+                    if (command.split(" ").length < 2) {
+                        System.out.println("Invalid command format. Please specify the room number.");
+                        break;
+                    }
+                    hotelSystem.checkOut(command.split(" ")[1]);
+
+
                     break;
                 case "report":
                     // Логика за извеждане на справка

@@ -42,7 +42,7 @@ public class DefaultXmlGenerator
         int beds = 2;
         for (int i = 100; i <= 410; i++)
         {
-            rooms.add(new Room(i, beds, false));
+            rooms.add(new Room(i, beds));
             if (i % 100 >= 5)
             {
                 beds = 3;

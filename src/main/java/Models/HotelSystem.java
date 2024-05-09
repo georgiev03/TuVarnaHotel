@@ -29,6 +29,8 @@ public class HotelSystem
     @XmlElement
     private List<Guest> guests = new ArrayList<>();
 
+    private DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+
     public void setRooms(List<Room> rooms)
     {
         this.rooms = rooms;
@@ -36,26 +38,33 @@ public class HotelSystem
 
     public String checkIn(String roomNumberStr, String fromDateStr, String toDateStr, String note, int guestsCount)
     {
-        if (!isValidDate(fromDateStr) || !isValidDate(toDateStr) || !isFutureDate(fromDateStr) || !isFutureDate(toDateStr) || !isEndDateAfterStartDate(fromDateStr, toDateStr)) {
+        if (!isValidDate(fromDateStr) || !isValidDate(toDateStr) || !isEndDateAfterStartDate(fromDateStr, toDateStr))
+        {
             return "Invalid dates. Please enter valid future dates where end date is after start date.";
         }
 
         int roomNumber = Integer.parseInt(roomNumberStr);
-        LocalDate fromDate = LocalDate.parse(fromDateStr);
-        LocalDate toDate = LocalDate.parse(toDateStr);
+        LocalDate fromDate = LocalDate.parse(fromDateStr, formatter);
+        LocalDate toDate = LocalDate.parse(toDateStr, formatter);
 
         Room roomToCheckIn = findRoom(roomNumber);
-        if (roomToCheckIn == null) {
+        if (roomToCheckIn == null)
+        {
             return "Room " + roomNumber + " does not exist.";
         }
 
-        if (roomToCheckIn.isOccupied(fromDate, toDate)) {
+        if (roomToCheckIn.isOccupied(fromDate, toDate))
+        {
             return "Room " + roomNumber + " is already occupied for the specified period.";
         }
 
         Stay stay = new Stay(fromDate, toDate, note);
-        if (guestsCount != -1) {
+        if (guestsCount != -1)
+        {
             stay.setGuestsCount(guestsCount);
+        } else
+        {
+            stay.setGuestsCount(roomToCheckIn.getBeds());
         }
 
         roomToCheckIn.addStay(stay);
@@ -63,35 +72,71 @@ public class HotelSystem
         return "Checked in successfully.";
     }
 
+    public List<Integer> checkAvailability(String dateStr)
+    {
+        LocalDate date = LocalDate.parse(dateStr);
+
+        List<Integer> availableRooms = new ArrayList<>();
+
+
+        for (Room room : rooms)
+        {
+            if (!room.isOccupied(date, date)) //TODO: Check working correctly
+            {
+                availableRooms.add(room.getNumber());
+            }
+        }
+
+        return availableRooms;
+    }
+
+    public void checkOut(String roomNumberStr)
+    {
+        int roomNumber = Integer.parseInt(roomNumberStr);
+        Room roomToCheckout = findRoom(roomNumber);
+
+        if (roomToCheckout == null) {
+            System.out.println("Room " + roomNumber + " does not exist.");
+            return;
+        }
+
+
+    }
+
     private Room findRoom(int roomNumber)
     {
-        for (Room room : rooms) {
-            if (room.getNumber() == roomNumber) {
+        for (Room room : rooms)
+        {
+            if (room.getNumber() == roomNumber)
+            {
                 return room;
             }
         }
         return null;
     }
 
-    private boolean isValidDate(String dateStr) {
-        try {
-            LocalDate.parse(dateStr, DateTimeFormatter.ISO_LOCAL_DATE);
+    private boolean isValidDate(String dateStr)
+    {
+        try
+        {
+            LocalDate.parse(dateStr, formatter);
             return true;
-        } catch (Exception e) {
+        } catch (Exception e)
+        {
             return false;
         }
     }
 
-    private boolean isFutureDate(String dateStr) {
-        LocalDate date = LocalDate.parse(dateStr, DateTimeFormatter.ISO_LOCAL_DATE);
-        return LocalDate.now().isBefore(date);
+    private boolean isFutureDate(String dateStr)
+    {
+        LocalDate date = LocalDate.parse(dateStr, formatter);
+        return !LocalDate.now().isBefore(date);
     }
 
-    private boolean isEndDateAfterStartDate(String startDateStr, String endDateStr) {
-        LocalDate startDate = LocalDate.parse(startDateStr, DateTimeFormatter.ISO_LOCAL_DATE);
-        LocalDate endDate = LocalDate.parse(endDateStr, DateTimeFormatter.ISO_LOCAL_DATE);
+    private boolean isEndDateAfterStartDate(String startDateStr, String endDateStr)
+    {
+        LocalDate startDate = LocalDate.parse(startDateStr, formatter);
+        LocalDate endDate = LocalDate.parse(endDateStr, formatter);
         return !endDate.isBefore(startDate);
     }
-
-
 }
