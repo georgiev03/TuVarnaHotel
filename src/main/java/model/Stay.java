@@ -1,9 +1,6 @@
 package src.main.java.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import src.main.java.config.LocalDateAdapter;
 
 import javax.xml.bind.annotation.XmlAccessType;
@@ -22,7 +19,6 @@ public class Stay
     @XmlElement
     @XmlJavaTypeAdapter(LocalDateAdapter.class)
     private LocalDate fromDate;
-
     @XmlElement
     @XmlJavaTypeAdapter(LocalDateAdapter.class)
     private LocalDate toDate;
