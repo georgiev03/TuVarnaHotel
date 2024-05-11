@@ -1,6 +1,6 @@
 package src.main.java.Service;
 
-import src.main.java.Models.HotelSystem;
+import src.main.java.model.HotelSystem;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -9,23 +9,27 @@ import java.util.Scanner;
 public class HotelSystemApp
 {
 
-    public static void Start()
+    public static void start()
     {
         HotelSystem hotelSystem = new HotelSystem();
         XmlFileHandler fileHandler = new XmlFileHandler();
         Scanner scanner = new Scanner(System.in);
         boolean fileOpened = false;
 
-        while (true) {
+        while (true)
+        {
             System.out.println("Enter a command: ");
             String command = scanner.nextLine();
 
-            switch (command.split(" ")[0]) {
+            switch (command.split(" ")[0])
+            {
                 case "open":
-                    if (!fileOpened) {
+                    if (!fileOpened)
+                    {
                         hotelSystem = fileHandler.openFile(hotelSystem, command.split(" ")[1]);
                         fileOpened = true;
-                    } else {
+                    } else
+                    {
                         System.out.println("A file is already open.");
                     }
                     break;
@@ -34,13 +38,14 @@ public class HotelSystemApp
                     System.out.println("File closed successfully.");
                     break;
                 case "save":
-                   fileHandler.saveFile(hotelSystem);
+                    fileHandler.saveFile(hotelSystem);
                     break;
                 case "saveas":
                     //fileHandler.saveFileAs(command.split(" ")[1]);
                     break;
                 case "checkin":
-                    if (command.split(" ").length < 5) {
+                    if (command.split(" ").length < 5)
+                    {
                         System.out.println("Invalid command format. Please try again.");
                         break;
                     }
@@ -59,21 +64,25 @@ public class HotelSystemApp
 
                     List<Integer> availableRooms = hotelSystem.checkAvailability(dateStr);
 
-                    if (availableRooms.isEmpty()) {
+                    if (availableRooms.isEmpty())
+                    {
                         System.out.println("No available rooms on " + dateStr);
-                    } else {
+                    } else
+                    {
                         System.out.println("Available rooms on " + dateStr + ": " + String.join(", ", availableRooms.toString()));
                     }
                     break;
                 case "checkout":
-                    if (command.split(" ").length < 2) {
+                    if (command.split(" ").length < 2)
+                    {
                         System.out.println("Invalid command format. Please specify the room number.");
                         break;
                     }
                     hotelSystem.checkOut(command.split(" ")[1]);
                     break;
                 case "report":
-                    if (command.split(" ").length < 3) {
+                    if (command.split(" ").length < 3)
+                    {
                         System.out.println("Invalid command format. Please specify the start and end dates.");
                         break;
                     }

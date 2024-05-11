@@ -1,4 +1,4 @@
-package src.main.java.Models;
+package src.main.java.model;
 
 
 import lombok.AllArgsConstructor;
@@ -6,10 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.*;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -31,7 +28,7 @@ public class HotelSystem
     @XmlElement
     private List<Guest> guests = new ArrayList<>();
 
-    private DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+    private transient DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
     public void setRooms(List<Room> rooms)
     {
@@ -60,7 +57,7 @@ public class HotelSystem
             return "Room " + roomNumber + " is already occupied for the specified period.";
         }
 
-        Stay stay = new Stay(fromDate.toString(), toDate.toString(), note);
+        Stay stay = new Stay(fromDate, toDate, note);
         if (guestsCount != -1)
         {
             stay.setGuestsCount(guestsCount);
@@ -119,13 +116,14 @@ public class HotelSystem
 
         for (Room room : rooms) {
             int daysUsed = 0;
-            if(room.getStays().size()==0){
+            if (room.getStays().isEmpty())
+            {
                 continue;
             }
 
             for (Stay stay : room.getStays()) {
-                LocalDate stayStartDate = LocalDate.parse(stay.getFromDate());
-                LocalDate stayEndDate = LocalDate.parse(stay.getToDate());
+                LocalDate stayStartDate = stay.getFromDate();
+                LocalDate stayEndDate = stay.getToDate();
 
                 if (!stayEndDate.isBefore(startDate) && !stayStartDate.isAfter(endDate)) {
                     LocalDate stayStart = stayStartDate.isBefore(startDate) ? startDate : stayStartDate;

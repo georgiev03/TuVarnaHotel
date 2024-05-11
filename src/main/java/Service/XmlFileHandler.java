@@ -1,7 +1,7 @@
 package src.main.java.Service;
 
 
-import src.main.java.Models.HotelSystem;
+import src.main.java.model.HotelSystem;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;

@@ -1,4 +1,4 @@
-package src.main.java.Models;
+package src.main.java.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -27,8 +27,8 @@ public class Room
 
     public boolean isOccupied(LocalDate fromDate, LocalDate toDate) {
         for (Stay stay : stays) {
-            LocalDate stayFromDate = LocalDate.parse(stay.getFromDate());
-            LocalDate stayToDate = LocalDate.parse(stay.getToDate());
+            LocalDate stayFromDate = stay.getFromDate();
+            LocalDate stayToDate = stay.getToDate();
 
             if ((stayFromDate.isAfter(fromDate) && stayFromDate.isBefore(toDate)) ||
                     (stayToDate.isAfter(fromDate) && stayToDate.isBefore(toDate)) ||
