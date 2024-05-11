@@ -13,7 +13,9 @@ import javax.xml.bind.annotation.XmlRootElement;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 
 @Getter
@@ -29,7 +31,7 @@ public class HotelSystem
     @XmlElement
     private List<Guest> guests = new ArrayList<>();
 
-    private DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+    private DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
     public void setRooms(List<Room> rooms)
     {
@@ -58,7 +60,7 @@ public class HotelSystem
             return "Room " + roomNumber + " is already occupied for the specified period.";
         }
 
-        Stay stay = new Stay(fromDate, toDate, note);
+        Stay stay = new Stay(fromDate.toString(), toDate.toString(), note);
         if (guestsCount != -1)
         {
             stay.setGuestsCount(guestsCount);
@@ -100,7 +102,47 @@ public class HotelSystem
             return;
         }
 
+        //TODO: finish this
+    }
 
+    public void report(String startDateStr, String endDateStr)
+    {
+        if (!isValidDate(startDateStr) || !isValidDate(endDateStr) || !isEndDateAfterStartDate(startDateStr, endDateStr)) {
+            System.out.println("Invalid dates. Please enter valid dates where end date is after start date.");
+            return;
+        }
+
+        LocalDate startDate = LocalDate.parse(startDateStr);
+        LocalDate endDate = LocalDate.parse(endDateStr);
+
+        Map<Integer, Integer> roomUsage = new HashMap<>();
+
+        for (Room room : rooms) {
+            int daysUsed = 0;
+            if(room.getStays().size()==0){
+                continue;
+            }
+
+            for (Stay stay : room.getStays()) {
+                LocalDate stayStartDate = LocalDate.parse(stay.getFromDate());
+                LocalDate stayEndDate = LocalDate.parse(stay.getToDate());
+
+                if (!stayEndDate.isBefore(startDate) && !stayStartDate.isAfter(endDate)) {
+                    LocalDate stayStart = stayStartDate.isBefore(startDate) ? startDate : stayStartDate;
+                    LocalDate stayEnd = stayEndDate.isAfter(endDate) ? endDate : stayEndDate;
+
+                    daysUsed += 1 + stayStart.until(stayEnd).getDays();
+                }
+            }
+
+
+            roomUsage.put(room.getNumber(), daysUsed);
+        }
+
+        System.out.println("Room Usage Report from " + startDateStr + " to " + endDateStr + ":");
+        for (Map.Entry<Integer, Integer> entry : roomUsage.entrySet()) {
+            System.out.println("Room " + entry.getKey() + " was used for " + entry.getValue() + " days.");
+        }
     }
 
     private Room findRoom(int roomNumber)
@@ -139,4 +181,6 @@ public class HotelSystem
         LocalDate endDate = LocalDate.parse(endDateStr, formatter);
         return !endDate.isBefore(startDate);
     }
+
+
 }

@@ -71,11 +71,17 @@ public class HotelSystemApp
                         break;
                     }
                     hotelSystem.checkOut(command.split(" ")[1]);
-
-
                     break;
                 case "report":
-                    // Логика за извеждане на справка
+                    if (command.split(" ").length < 3) {
+                        System.out.println("Invalid command format. Please specify the start and end dates.");
+                        break;
+                    }
+
+                    String startDateStr = command.split(" ")[1];
+                    String endDateStr = command.split(" ")[2];
+
+                    hotelSystem.report(startDateStr, endDateStr);
                     break;
                 case "find":
                     // Логика за намиране на свободна стая

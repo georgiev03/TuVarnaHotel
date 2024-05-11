@@ -27,8 +27,8 @@ public class Room
 
     public boolean isOccupied(LocalDate fromDate, LocalDate toDate) {
         for (Stay stay : stays) {
-            LocalDate stayFromDate = stay.getFromDate();
-            LocalDate stayToDate = stay.getToDate();
+            LocalDate stayFromDate = LocalDate.parse(stay.getFromDate());
+            LocalDate stayToDate = LocalDate.parse(stay.getToDate());
 
             if ((stayFromDate.isAfter(fromDate) && stayFromDate.isBefore(toDate)) ||
                     (stayToDate.isAfter(fromDate) && stayToDate.isBefore(toDate)) ||
