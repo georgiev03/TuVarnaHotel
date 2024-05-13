@@ -16,7 +16,6 @@ public class XmlFileHandler
 
     public HotelSystem openFile(HotelSystem hotelSystem, String filePath)
     {
-
         try
         {
             context = JAXBContext.newInstance(HotelSystem.class);
@@ -24,7 +23,7 @@ public class XmlFileHandler
             file = new File(filePath);
             if (!file.exists())
             {
-                hotelSystem = DefaultXmlGenerator.generateDefaultXml(hotelSystem,filePath);
+                hotelSystem = DefaultXmlGenerator.generateDefaultXml(hotelSystem, filePath);
                 marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
                 marshaller.marshal(hotelSystem, new File(filePath));
                 System.out.println("File created: " + file.getName());
@@ -49,6 +48,21 @@ public class XmlFileHandler
             marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
             marshaller.marshal(hotelSystem, file);
             System.out.println("File saved successfully.");
+        } catch (JAXBException e)
+        {
+            System.out.println("An error occurred while saving the file: " + e.getMessage());
+        }
+    }
+
+    public void saveAs(HotelSystem hotelSystem, String filePath)
+    {
+        try
+        {
+            context = JAXBContext.newInstance(HotelSystem.class);
+            Marshaller marshaller = context.createMarshaller();
+            marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
+            marshaller.marshal(hotelSystem, new File(filePath));
+            System.out.println("File saved successfully as: " + filePath);
         } catch (JAXBException e)
         {
             System.out.println("An error occurred while saving the file: " + e.getMessage());
