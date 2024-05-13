@@ -3,7 +3,6 @@ package src.main.java.Service;
 import src.main.java.model.HotelSystem;
 
 import java.time.LocalDate;
-import java.util.List;
 import java.util.Scanner;
 
 public class HotelSystemApp
@@ -19,20 +18,21 @@ public class HotelSystemApp
         while (true)
         {
             System.out.println("Enter a command: ");
-            String command = scanner.nextLine();
+            String input = scanner.nextLine();
+            String command = input.split(" ")[0];
 
-            if (!fileOpened && !command.split(" ")[0].equals("open"))
+            if (!fileOpened && !command.equals("open") && !command.equals("help") && !command.equals("exit"))
             {
                 System.out.println("You need to open a file first.");
                 continue;
             }
 
-            switch (command.split(" ")[0])
+            switch (input.split(" ")[0])
             {
                 case "open":
                     if (!fileOpened)
                     {
-                        hotelSystem = fileHandler.openFile(hotelSystem, command.split(" ")[1]);
+                        hotelSystem = fileHandler.openFile(hotelSystem, input.split(" ")[1]);
                         fileOpened = true;
                     } else
                     {
@@ -47,86 +47,78 @@ public class HotelSystemApp
                     fileHandler.saveFile(hotelSystem);
                     break;
                 case "saveas":
-                    //fileHandler.saveFileAs(command.split(" ")[1]);
+                    fileHandler.saveAs(hotelSystem, input.split(" \"")[1].replace("\"", ""));
                     break;
                 case "checkin":
-                    if (command.split(" ").length < 5)
+                    if (input.split(" ").length < 5)
                     {
                         System.out.println("Invalid command format. Please try again.");
                         break;
                     }
 
-                    String roomNumber = command.split(" ")[1];
-                    startDateStr = command.split(" ")[2];
-                    endDateStr = command.split(" ")[3];
-                    note = command.split(" ")[4];
-                    int guestsCount = command.split(" ").length > 5 ? Integer.parseInt(command.split(" ")[5]) : -1;
+                    String roomNumber = input.split(" ")[1];
+                    startDateStr = input.split(" ")[2];
+                    endDateStr = input.split(" ")[3];
+                    note = input.split(" ")[4];
+                    int guestsCount = input.split(" ").length > 5 ? Integer.parseInt(input.split(" ")[5]) : -1;
 
                     String checkInResult = hotelSystem.checkIn(roomNumber, startDateStr, endDateStr, note, guestsCount);
                     System.out.println(checkInResult);
                     break;
                 case "availability":
-                    startDateStr = command.split(" ").length > 1 ? command.split(" ")[1] : String.valueOf(LocalDate.now());
+                    startDateStr = input.split(" ").length > 1 ? input.split(" ")[1] : String.valueOf(LocalDate.now());
 
-                    List<Integer> availableRooms = hotelSystem.checkAvailability(startDateStr);
-
-                    if (availableRooms.isEmpty())
-                    {
-                        System.out.println("No available rooms on " + startDateStr);
-                    } else
-                    {
-                        System.out.println("Available rooms on " + startDateStr + ": " + String.join(", ", availableRooms.toString()));
-                    }
+                    hotelSystem.checkAvailability(startDateStr);
                     break;
                 case "checkout":
-                    if (command.split(" ").length < 2)
+                    if (input.split(" ").length < 2)
                     {
                         System.out.println("Invalid command format. Please specify the room number.");
                         break;
                     }
-                    hotelSystem.checkOut(command.split(" ")[1]);
+                    hotelSystem.checkOut(input.split(" ")[1]);
                     break;
                 case "report":
-                    if (command.split(" ").length < 3)
+                    if (input.split(" ").length < 3)
                     {
                         System.out.println("Invalid command format. Please specify the start and end dates.");
                         break;
                     }
 
-                    startDateStr = command.split(" ")[1];
-                    endDateStr = command.split(" ")[2];
+                    startDateStr = input.split(" ")[1];
+                    endDateStr = input.split(" ")[2];
 
                     hotelSystem.report(startDateStr, endDateStr);
                     break;
                 case "find":
-                    if (command.split(" ").length < 4)
+                    if (input.split(" ").length < 4)
                     {
                         System.out.println("Invalid command format. Please specify the number of beds, start date and end date.");
                         break;
                     }
 
-                    int requiredBeds = Integer.parseInt(command.split(" ")[1]);
-                    startDateStr = command.split(" ")[2];
-                    endDateStr = command.split(" ")[3];
+                    int requiredBeds = Integer.parseInt(input.split(" ")[1]);
+                    startDateStr = input.split(" ")[2];
+                    endDateStr = input.split(" ")[3];
 
                     hotelSystem.find(requiredBeds, startDateStr, endDateStr);
                     break;
                 case "unavailable":
-                    if (command.split(" ").length < 5)
+                    if (input.split(" ").length < 5)
                     {
                         System.out.println("Invalid command format. Please specify the number of beds, start date and end date.");
                         break;
                     }
 
-                    int roomNum = Integer.parseInt(command.split(" ")[1]);
-                    startDateStr = command.split(" ")[2];
-                    endDateStr = command.split(" ")[3];
-                    note = command.split(" ")[4];
+                    int roomNum = Integer.parseInt(input.split(" ")[1]);
+                    startDateStr = input.split(" ")[2];
+                    endDateStr = input.split(" ")[3];
+                    note = input.split(" ")[4];
 
                     hotelSystem.markUnavailable(roomNum, startDateStr, endDateStr, note);
                     break;
                 case "help":
-                    // Логика за извеждане на помощна информация
+                    help();
                     break;
                 case "exit":
                     System.exit(0);
@@ -136,4 +128,22 @@ public class HotelSystemApp
             }
         }
     }
+
+    private static void help()
+    {
+        System.out.println("Available commands:");
+        System.out.println("open <filename> - Opens a hotel data file.");
+        System.out.println("close - Closes the currently opened data file.");
+        System.out.println("save - Saves the changes to the currently opened data file.");
+        System.out.println("saveas <filename> - Saves the changes to a new hotel data file.");
+        System.out.println("checkin <room> <from> <to> <note> [<guests>] - Registers a guest in a room.");
+        System.out.println("availability [<date>] - Displays available rooms for a given date or today.");
+        System.out.println("checkout <room> - Checks out a guest from a room for today.");
+        System.out.println("report <from> <to> - Displays room usage report for a given period.");
+        System.out.println("find <beds> <from> <to> - Finds available room with specified beds for a given period.");
+        System.out.println("unavailable <room> <from> <to> <note> - Marks a room as unavailable for a given period.");
+        System.out.println("help - Displays this help message.");
+        System.out.println("exit - Exits the program.");
+    }
+
 }

@@ -71,7 +71,7 @@ public class HotelSystem
         return "Checked in successfully.";
     }
 
-    public List<Integer> checkAvailability(String dateStr)
+    public void checkAvailability(String dateStr)
     {
         LocalDate date = LocalDate.parse(dateStr);
 
@@ -86,7 +86,13 @@ public class HotelSystem
             }
         }
 
-        return availableRooms;
+        if (availableRooms.isEmpty())
+        {
+            System.out.println("No available rooms on " + date);
+        } else
+        {
+            System.out.println("Available rooms on " + date + ": " + String.join(", ", availableRooms.toString()));
+        }
     }
 
     public void checkOut(String roomNumberStr)
