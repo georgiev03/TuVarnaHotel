@@ -100,7 +100,21 @@ public class HotelSystem
             return;
         }
 
-        //TODO: finish this
+        LocalDate dateToday = LocalDate.now();
+        if (!roomToCheckout.isOccupied(dateToday, dateToday))
+        {
+            System.out.println("Room " + roomNumber + " is not occupied.");
+            return;
+        }
+
+        var stay = roomToCheckout.findStay(dateToday);
+        if (stay != null)
+        {
+            System.out.println("Stay from: " + stay.getFromDate() + ", to: " + stay.getToDate() + " has successfully checkout.");
+            roomToCheckout.removeStay(stay);
+            return;
+        }
+        System.out.println("Couldn't checkout room " + roomNumberStr);
     }
 
     public void report(String startDateStr, String endDateStr)

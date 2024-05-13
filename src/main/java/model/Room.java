@@ -41,6 +41,29 @@ public class Room
         return false;
     }
 
+    public Stay findStay(LocalDate date)
+    {
+
+        for (Stay stay : stays)
+        {
+            LocalDate stayFromDate = stay.getFromDate();
+            LocalDate stayToDate = stay.getToDate();
+
+            if (!stayFromDate.isAfter(date) && !stayToDate.isBefore(date))
+            {
+                return stay;
+            }
+        }
+
+        return null;
+    }
+
+    public void removeStay(Stay stay)
+    {
+        stays.remove(stay);
+    }
+
+
     public void addStay(Stay stay)
     {
         stays.add(stay);
