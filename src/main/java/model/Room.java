@@ -18,6 +18,8 @@ public class Room
     private int number;
     private int beds;
     private List<Stay> stays = new ArrayList<>();
+    private List<Stay> unavailablePeriods = new ArrayList<>();
+
 
     public Room(int number, int beds)
     {
@@ -25,7 +27,7 @@ public class Room
         this.beds = beds;
     }
 
-    public boolean isOccupied(LocalDate fromDate, LocalDate toDate)
+    public boolean isUnavailable(LocalDate fromDate, LocalDate toDate)
     {
         for (Stay stay : stays)
         {
@@ -63,9 +65,13 @@ public class Room
         stays.remove(stay);
     }
 
-
     public void addStay(Stay stay)
     {
         stays.add(stay);
+    }
+
+    public void addUnavailablePeriod(LocalDate fromDate, LocalDate toDate, String note)
+    {
+        unavailablePeriods.add(new Stay(fromDate, toDate, note, 0));
     }
 }

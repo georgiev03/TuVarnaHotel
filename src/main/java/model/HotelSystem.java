@@ -52,9 +52,9 @@ public class HotelSystem
             return "Room " + roomNumber + " does not exist.";
         }
 
-        if (roomToCheckIn.isOccupied(fromDate, toDate))
+        if (roomToCheckIn.isUnavailable(fromDate, toDate))
         {
-            return "Room " + roomNumber + " is already occupied for the specified period.";
+            return "Room " + roomNumber + " is already unavailable for the specified period.";
         }
 
         Stay stay = new Stay(fromDate, toDate, note);
@@ -80,7 +80,7 @@ public class HotelSystem
 
         for (Room room : rooms)
         {
-            if (!room.isOccupied(date, date)) //TODO: Check working correctly
+            if (!room.isUnavailable(date, date))
             {
                 availableRooms.add(room.getNumber());
             }
@@ -101,9 +101,9 @@ public class HotelSystem
         }
 
         LocalDate dateToday = LocalDate.now();
-        if (!roomToCheckout.isOccupied(dateToday, dateToday))
+        if (!roomToCheckout.isUnavailable(dateToday, dateToday))
         {
-            System.out.println("Room " + roomNumber + " is not occupied.");
+            System.out.println("Room " + roomNumber + " is not unavailable for today " + dateToday + ".");
             return;
         }
 
@@ -162,6 +162,74 @@ public class HotelSystem
         }
     }
 
+    public void find(int requiredBeds, String startDateStr, String endDateStr)
+    {
+        if (!isValidDate(startDateStr) || !isValidDate(endDateStr) || !isEndDateAfterStartDate(startDateStr, endDateStr))
+        {
+            System.out.println("Invalid dates. Please enter valid dates where end date is after start date.");
+            return;
+        }
+        if (requiredBeds <= 0)
+        {
+            System.out.println("Invalid number of required beds. Please enter a positive number of beds.");
+            return;
+        }
+
+        LocalDate startDate = LocalDate.parse(startDateStr);
+        LocalDate endDate = LocalDate.parse(endDateStr);
+
+        Room selectedRoom = null;
+
+        for (Room room : rooms)
+        {
+            if (room.getBeds() >= requiredBeds && !room.isUnavailable(startDate, endDate))
+            {
+                if (selectedRoom == null || room.getBeds() < selectedRoom.getBeds())
+                {
+                    selectedRoom = room;
+                }
+            }
+        }
+
+        if (selectedRoom == null)
+        {
+            System.out.println("No available room with at least " + requiredBeds + " beds for the specified dates.");
+        } else
+        {
+            System.out.println("Available room with at least " + requiredBeds + " beds for the specified dates:");
+            System.out.println(selectedRoom.getNumber() + " - " + selectedRoom.getBeds() + " beds");
+        }
+    }
+
+    public void markUnavailable(int roomNum, String startDateStr, String endDateStr, String note)
+    {
+        if (!isValidDate(startDateStr) || !isValidDate(endDateStr) || !isEndDateAfterStartDate(startDateStr, endDateStr))
+        {
+            System.out.println("Invalid dates. Please enter valid dates where end date is after start date.");
+            return;
+        }
+
+        Room roomToMarkUnavailable = findRoom(roomNum);
+        if (roomToMarkUnavailable == null)
+        {
+            System.out.println("Room " + roomNum + " does not exist.");
+            return;
+        }
+
+        LocalDate fromDate = LocalDate.parse(startDateStr);
+        LocalDate toDate = LocalDate.parse(endDateStr);
+
+        Stay overlappingStay = roomToMarkUnavailable.isUnavailable(fromDate, toDate) ? roomToMarkUnavailable.findStay(fromDate) : null;
+        if (overlappingStay != null)
+        {
+            System.out.println("Room " + roomNum + " is already unavailable from " + overlappingStay.getFromDate() + " to " + overlappingStay.getToDate() + ". Please select different dates.");
+            return;
+        }
+
+        roomToMarkUnavailable.addUnavailablePeriod(fromDate, toDate, note);
+        System.out.println("Room " + roomNum + " is marked as unavailable from " + fromDate + " to " + toDate + " for the reason: " + note);
+    }
+
     private Room findRoom(int roomNumber)
     {
         for (Room room : rooms)
@@ -198,6 +266,5 @@ public class HotelSystem
         LocalDate endDate = LocalDate.parse(endDateStr, formatter);
         return !endDate.isBefore(startDate);
     }
-
 
 }
