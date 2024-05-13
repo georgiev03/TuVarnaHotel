@@ -94,7 +94,8 @@ public class HotelSystem
         int roomNumber = Integer.parseInt(roomNumberStr);
         Room roomToCheckout = findRoom(roomNumber);
 
-        if (roomToCheckout == null) {
+        if (roomToCheckout == null)
+        {
             System.out.println("Room " + roomNumber + " does not exist.");
             return;
         }
@@ -104,7 +105,8 @@ public class HotelSystem
 
     public void report(String startDateStr, String endDateStr)
     {
-        if (!isValidDate(startDateStr) || !isValidDate(endDateStr) || !isEndDateAfterStartDate(startDateStr, endDateStr)) {
+        if (!isValidDate(startDateStr) || !isValidDate(endDateStr) || !isEndDateAfterStartDate(startDateStr, endDateStr))
+        {
             System.out.println("Invalid dates. Please enter valid dates where end date is after start date.");
             return;
         }
@@ -114,18 +116,21 @@ public class HotelSystem
 
         Map<Integer, Integer> roomUsage = new HashMap<>();
 
-        for (Room room : rooms) {
+        for (Room room : rooms)
+        {
             int daysUsed = 0;
             if (room.getStays().isEmpty())
             {
                 continue;
             }
 
-            for (Stay stay : room.getStays()) {
+            for (Stay stay : room.getStays())
+            {
                 LocalDate stayStartDate = stay.getFromDate();
                 LocalDate stayEndDate = stay.getToDate();
 
-                if (!stayEndDate.isBefore(startDate) && !stayStartDate.isAfter(endDate)) {
+                if (!stayEndDate.isBefore(startDate) && !stayStartDate.isAfter(endDate))
+                {
                     LocalDate stayStart = stayStartDate.isBefore(startDate) ? startDate : stayStartDate;
                     LocalDate stayEnd = stayEndDate.isAfter(endDate) ? endDate : stayEndDate;
 
@@ -133,12 +138,12 @@ public class HotelSystem
                 }
             }
 
-
             roomUsage.put(room.getNumber(), daysUsed);
         }
 
         System.out.println("Room Usage Report from " + startDateStr + " to " + endDateStr + ":");
-        for (Map.Entry<Integer, Integer> entry : roomUsage.entrySet()) {
+        for (Map.Entry<Integer, Integer> entry : roomUsage.entrySet())
+        {
             System.out.println("Room " + entry.getKey() + " was used for " + entry.getValue() + " days.");
         }
     }

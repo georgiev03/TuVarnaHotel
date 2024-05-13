@@ -25,14 +25,16 @@ public class Room
         this.beds = beds;
     }
 
-    public boolean isOccupied(LocalDate fromDate, LocalDate toDate) {
-        for (Stay stay : stays) {
+    public boolean isOccupied(LocalDate fromDate, LocalDate toDate)
+    {
+        for (Stay stay : stays)
+        {
             LocalDate stayFromDate = stay.getFromDate();
             LocalDate stayToDate = stay.getToDate();
 
-            if ((stayFromDate.isAfter(fromDate) && stayFromDate.isBefore(toDate)) ||
-                    (stayToDate.isAfter(fromDate) && stayToDate.isBefore(toDate)) ||
-            stayFromDate.isEqual(fromDate) || stayToDate.isEqual(toDate)) {
+            if (!((fromDate.isBefore(stayFromDate) && toDate.isBefore(stayFromDate)) ||
+                    (toDate.isAfter(stayToDate) && fromDate.isAfter(stayFromDate))))
+            {
                 return true;
             }
         }
