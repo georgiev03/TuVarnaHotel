@@ -14,7 +14,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-
+/**
+ * The HotelSystem class manages the operations and state of the hotel, including room management and bookings.
+ */
 @Getter
 @Setter
 @NoArgsConstructor
@@ -23,18 +25,43 @@ import java.util.Map;
 @XmlAccessorType(XmlAccessType.FIELD)
 public class HotelSystem
 {
+    /**
+     * The list of rooms in the hotel.
+     */
     @XmlElement
     private List<Room> rooms = new ArrayList<>();
+
+    /**
+     * The list of guests in the hotel.
+     */
     @XmlElement
     private List<Guest> guests = new ArrayList<>();
 
+    /**
+     * A DateTimeFormatter instance for formatting date strings.
+     */
     private transient DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
+    /**
+     * Sets the list of rooms in the hotel.
+     *
+     * @param rooms the list of rooms
+     */
     public void setRooms(List<Room> rooms)
     {
         this.rooms = rooms;
     }
 
+    /**
+     * Registers a guest in a specified room for a given period with a note.
+     *
+     * @param roomNumberStr the room number
+     * @param fromDateStr   the start date
+     * @param toDateStr     the end date
+     * @param note          the note for the booking
+     * @param guestsCount   the number of guests (optional)
+     * @return a message indicating the result of the check-in
+     */
     public String checkIn(String roomNumberStr, String fromDateStr, String toDateStr, String note, int guestsCount)
     {
         if (!isValidDate(fromDateStr) || !isValidDate(toDateStr) || !isEndDateAfterStartDate(fromDateStr, toDateStr))
@@ -71,6 +98,11 @@ public class HotelSystem
         return "Checked in successfully.";
     }
 
+    /**
+     * Displays the availability of rooms for a given date.
+     *
+     * @param dateStr the date to check availability
+     */
     public void checkAvailability(String dateStr)
     {
         LocalDate date = LocalDate.parse(dateStr);
@@ -95,6 +127,11 @@ public class HotelSystem
         }
     }
 
+    /**
+     * Checks out a guest from a specified room for today.
+     *
+     * @param roomNumberStr the room number
+     */
     public void checkOut(String roomNumberStr)
     {
         int roomNumber = Integer.parseInt(roomNumberStr);
@@ -123,6 +160,12 @@ public class HotelSystem
         System.out.println("Couldn't checkout room " + roomNumberStr);
     }
 
+    /**
+     * Generates a report of room usage for a given period.
+     *
+     * @param startDateStr the start date of the period
+     * @param endDateStr the end date of the period
+     */
     public void report(String startDateStr, String endDateStr)
     {
         if (!isValidDate(startDateStr) || !isValidDate(endDateStr) || !isEndDateAfterStartDate(startDateStr, endDateStr))
@@ -168,6 +211,13 @@ public class HotelSystem
         }
     }
 
+    /**
+     * Finds available rooms with a specified number of beds for a given period.
+     *
+     * @param requiredBeds the number of beds required
+     * @param startDateStr the start date of the period
+     * @param endDateStr the end date of the period
+     */
     public void find(int requiredBeds, String startDateStr, String endDateStr)
     {
         if (!isValidDate(startDateStr) || !isValidDate(endDateStr) || !isEndDateAfterStartDate(startDateStr, endDateStr))
@@ -207,6 +257,14 @@ public class HotelSystem
         }
     }
 
+    /**
+     * Marks a specified room as unavailable for a given period with a note.
+     *
+     * @param roomNum the room number
+     * @param startDateStr the start date of the period
+     * @param endDateStr the end date of the period
+     * @param note the note for the unavailability
+     */
     public void markUnavailable(int roomNum, String startDateStr, String endDateStr, String note)
     {
         if (!isValidDate(startDateStr) || !isValidDate(endDateStr) || !isEndDateAfterStartDate(startDateStr, endDateStr))
@@ -236,6 +294,12 @@ public class HotelSystem
         System.out.println("Room " + roomNum + " is marked as unavailable from " + fromDate + " to " + toDate + " for the reason: " + note);
     }
 
+    /**
+     * Finds a room by its number.
+     *
+     * @param roomNumber the room number to find
+     * @return the Room object if found, else null
+     */
     private Room findRoom(int roomNumber)
     {
         for (Room room : rooms)
@@ -248,6 +312,12 @@ public class HotelSystem
         return null;
     }
 
+    /**
+     * Checks if a given date string is valid.
+     *
+     * @param dateStr the date string to validate
+     * @return true if the date string is valid, otherwise false
+     */
     private boolean isValidDate(String dateStr)
     {
         try
@@ -260,12 +330,13 @@ public class HotelSystem
         }
     }
 
-    private boolean isFutureDate(String dateStr)
-    {
-        LocalDate date = LocalDate.parse(dateStr, formatter);
-        return !LocalDate.now().isBefore(date);
-    }
-
+    /**
+     * Checks if the end date is after the start date.
+     *
+     * @param startDateStr the start date string
+     * @param endDateStr the end date string
+     * @return true if end date is after start date, otherwise false
+     */
     private boolean isEndDateAfterStartDate(String startDateStr, String endDateStr)
     {
         LocalDate startDate = LocalDate.parse(startDateStr, formatter);

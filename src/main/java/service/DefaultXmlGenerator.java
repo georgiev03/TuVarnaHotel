@@ -1,4 +1,4 @@
-package src.main.java.Service;
+package src.main.java.service;
 
 import src.main.java.model.HotelSystem;
 import src.main.java.model.Room;
@@ -10,8 +10,18 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * The DefaultXmlGenerator class provides a method to generate a default XML file for the HotelSystem.
+ */
 public class DefaultXmlGenerator
 {
+    /**
+     * Generates a default XML file with sample hotel data.
+     *
+     * @param defaultHotelSystem the HotelSystem instance to populate with default data
+     * @param filePath           the path of the XML file to create
+     * @return the HotelSystem with default data
+     */
     public static HotelSystem generateDefaultXml(HotelSystem defaultHotelSystem, String filePath)
     {
         try
@@ -35,6 +45,11 @@ public class DefaultXmlGenerator
         }
     }
 
+    /**
+     * Creates and returns a HotelSystem instance populated with default room data.
+     *
+     * @return a HotelSystem instance with default room data
+     */
     private static HotelSystem getDefaultHotelSystem()
     {
         HotelSystem hotelSystem = new HotelSystem();
@@ -59,5 +74,4 @@ public class DefaultXmlGenerator
 
         return hotelSystem;
     }
-
 }

@@ -1,4 +1,4 @@
-package src.main.java.Service;
+package src.main.java.service;
 
 
 import src.main.java.model.HotelSystem;
@@ -9,11 +9,28 @@ import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
 import java.io.File;
 
+/**
+ * The XmlFileHandler class provides methods to handle XML files for the HotelSystem.
+ */
 public class XmlFileHandler
 {
+    /**
+     * The XML file being handled.
+     */
     private File file;
+
+    /**
+     * The JAXB context for XML marshalling and unmarshalling.
+     */
     private JAXBContext context;
 
+    /**
+     * Opens an XML file and loads the hotel data into the HotelSystem.
+     *
+     * @param hotelSystem the HotelSystem instance to load data into
+     * @param filePath    the path of the XML file to open
+     * @return the HotelSystem with loaded data
+     */
     public HotelSystem openFile(HotelSystem hotelSystem, String filePath)
     {
         try
@@ -40,6 +57,11 @@ public class XmlFileHandler
         return hotelSystem;
     }
 
+    /**
+     * Saves the current state of the HotelSystem to the opened XML file.
+     *
+     * @param hotelSystem the HotelSystem instance to save
+     */
     public void saveFile(HotelSystem hotelSystem)
     {
         try
@@ -54,6 +76,12 @@ public class XmlFileHandler
         }
     }
 
+    /**
+     * Saves the current state of the HotelSystem to a specified XML file.
+     *
+     * @param hotelSystem the HotelSystem instance to save
+     * @param filePath    the path of the XML file to save as
+     */
     public void saveAs(HotelSystem hotelSystem, String filePath)
     {
         try

@@ -1,13 +1,18 @@
-package src.main.java.Service;
+package src.main.java.service;
 
 import src.main.java.model.HotelSystem;
 
 import java.time.LocalDate;
 import java.util.Scanner;
 
+/**
+ * The HotelSystemApp class provides a command-line interface for interacting with the HotelSystem.
+ */
 public class HotelSystemApp
 {
-
+    /**
+     * Starts the Hotel System Application, processing user commands in a loop.
+     */
     public static void start()
     {
         HotelSystem hotelSystem = new HotelSystem();
@@ -129,6 +134,9 @@ public class HotelSystemApp
         }
     }
 
+    /**
+     * Displays the help message with available commands.
+     */
     private static void help()
     {
         System.out.println("Available commands:");

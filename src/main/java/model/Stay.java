@@ -9,6 +9,9 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import java.time.LocalDate;
 
+/**
+ * The Stay class represents a stay in a hotel room with details about the duration, notes, and guest count.
+ */
 @Getter
 @Setter
 @NoArgsConstructor
@@ -16,15 +19,36 @@ import java.time.LocalDate;
 @XmlAccessorType(XmlAccessType.FIELD)
 public class Stay
 {
+    /**
+     * The start date of the stay.
+     */
     @XmlElement
     @XmlJavaTypeAdapter(LocalDateAdapter.class)
     private LocalDate fromDate;
+
+    /**
+     * The end date of the stay.
+     */
     @XmlElement
     @XmlJavaTypeAdapter(LocalDateAdapter.class)
     private LocalDate toDate;
+
+    /**
+     * A note associated with the stay.
+     */
     private String note;
+    /**
+     * The number of guests staying.
+     */
     private int guestsCount;
 
+    /**
+     * Constructs a Stay with the specified from date, to date, and note.
+     *
+     * @param fromDate the start date of the stay
+     * @param toDate   the end date of the stay
+     * @param note     the note associated with the stay
+     */
     public Stay(LocalDate fromDate, LocalDate toDate, String note)
     {
         this.fromDate = fromDate;
