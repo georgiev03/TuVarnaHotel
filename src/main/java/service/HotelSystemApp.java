@@ -2,6 +2,7 @@ package src.main.java.service;
 
 import src.main.java.model.HotelSystem;
 
+import java.time.LocalDate;
 import java.util.Scanner;
 
 /**
@@ -86,6 +87,11 @@ public class HotelSystemApp
 
                     String checkInResult = hotelSystem.checkIn(roomNumber, startDateStr, endDateStr, note, guestsCount);
                     System.out.println(checkInResult);
+                    break;
+                case "availability":
+                    startDateStr = input.split(" ").length > 1 ? input.split(" ")[1] : String.valueOf(LocalDate.now());
+
+                    hotelSystem.checkAvailability(startDateStr);
                     break;
                 case "checkout":
                     if (input.split(" ").length < 2)
