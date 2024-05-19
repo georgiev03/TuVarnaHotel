@@ -1,6 +1,6 @@
-package src.main.java;
+package sit.tu_varna;
 
-import src.main.java.service.HotelSystemApp;
+import sit.tu_varna.service.HotelSystemApp;
 
 import java.io.IOException;
 

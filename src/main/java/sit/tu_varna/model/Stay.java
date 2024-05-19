@@ -1,7 +1,7 @@
-package src.main.java.model;
+package sit.tu_varna.model;
 
+import sit.tu_varna.config.LocalDateAdapter;
 import lombok.*;
-import src.main.java.config.LocalDateAdapter;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;

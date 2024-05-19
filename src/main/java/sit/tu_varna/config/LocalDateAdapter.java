@@ -1,4 +1,4 @@
-package src.main.java.config;
+package sit.tu_varna.config;
 
 import javax.xml.bind.annotation.adapters.XmlAdapter;
 import java.time.LocalDate;

@@ -1,7 +1,7 @@
-package src.main.java.service;
+package sit.tu_varna.service;
 
-import src.main.java.model.HotelSystem;
-import src.main.java.model.Room;
+import sit.tu_varna.model.HotelSystem;
+import sit.tu_varna.model.Room;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;

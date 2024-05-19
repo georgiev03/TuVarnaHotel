@@ -1,4 +1,4 @@
-package src.main.java.model;
+package sit.tu_varna.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

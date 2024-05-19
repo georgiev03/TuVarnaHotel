@@ -1,6 +1,6 @@
-package src.main.java.service;
+package sit.tu_varna.service;
 
-import src.main.java.model.HotelSystem;
+import sit.tu_varna.model.HotelSystem;
 
 import java.time.LocalDate;
 import java.util.Scanner;
