@@ -2,7 +2,6 @@ package src.main.java.service;
 
 import src.main.java.model.HotelSystem;
 
-import java.time.LocalDate;
 import java.util.Scanner;
 
 /**
@@ -55,25 +54,38 @@ public class HotelSystemApp
                     fileHandler.saveAs(hotelSystem, input.split(" \"")[1].replace("\"", ""));
                     break;
                 case "checkin":
-                    if (input.split(" ").length < 5)
+                    String[] parts = input.split(" ");
+                    if (parts.length < 5)
                     {
                         System.out.println("Invalid command format. Please try again.");
                         break;
                     }
 
-                    String roomNumber = input.split(" ")[1];
-                    startDateStr = input.split(" ")[2];
-                    endDateStr = input.split(" ")[3];
-                    note = input.split(" ")[4];
-                    int guestsCount = input.split(" ").length > 5 ? Integer.parseInt(input.split(" ")[5]) : -1;
+                    String roomNumber = parts[1];
+                    startDateStr = parts[2];
+                    endDateStr = parts[3];
+                    int guestsCount = -1;
+                    StringBuilder noteBuilder = new StringBuilder();
+
+                    try
+                    {
+                        guestsCount = Integer.parseInt(parts[parts.length - 1]);
+                        for (int i = 4; i < parts.length - 1; i++)
+                        {
+                            noteBuilder.append(parts[i]).append(" ");
+                        }
+                    } catch (NumberFormatException e)
+                    {
+                        for (int i = 4; i < parts.length; i++)
+                        {
+                            noteBuilder.append(parts[i]).append(" ");
+                        }
+                    }
+
+                    note = noteBuilder.toString().trim();
 
                     String checkInResult = hotelSystem.checkIn(roomNumber, startDateStr, endDateStr, note, guestsCount);
                     System.out.println(checkInResult);
-                    break;
-                case "availability":
-                    startDateStr = input.split(" ").length > 1 ? input.split(" ")[1] : String.valueOf(LocalDate.now());
-
-                    hotelSystem.checkAvailability(startDateStr);
                     break;
                 case "checkout":
                     if (input.split(" ").length < 2)
@@ -102,7 +114,15 @@ public class HotelSystemApp
                         break;
                     }
 
-                    int requiredBeds = Integer.parseInt(input.split(" ")[1]);
+                    int requiredBeds;
+                    try
+                    {
+                        requiredBeds = Integer.parseInt(input.split(" ")[1]);
+                    } catch (NumberFormatException e)
+                    {
+                        System.out.println("Invalid number of beds. Please enter a valid integer.");
+                        break;
+                    }
                     startDateStr = input.split(" ")[2];
                     endDateStr = input.split(" ")[3];
 
@@ -115,7 +135,15 @@ public class HotelSystemApp
                         break;
                     }
 
-                    int roomNum = Integer.parseInt(input.split(" ")[1]);
+                    int roomNum;
+                    try
+                    {
+                        roomNum = Integer.parseInt(input.split(" ")[1]);
+                    } catch (NumberFormatException e)
+                    {
+                        System.out.println("Invalid room number. Please enter a valid integer.");
+                        break;
+                    }
                     startDateStr = input.split(" ")[2];
                     endDateStr = input.split(" ")[3];
                     note = input.split(" ")[4];
