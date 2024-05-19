@@ -22,7 +22,7 @@ This project uses the following external libraries:
 - `close`: Close the currently opened data file.
 - `save`: Save changes to the current data file.
 - `saveas <filename>`: Save changes to a new data file.
-- `availability [<date>]`: Display available rooms for a given date.
+- `availability [<date>]`: Display available rooms for a given date or for today if not specified.
 - `checkout <room>`: Check out a guest from a room.
 - `report <from> <to>`: Generate a room usage report.
 - `find <beds> <from> <to>`: Find available rooms with specified beds.
